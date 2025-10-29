@@ -27,6 +27,7 @@
             line-height: 1.6;
             color: var(--dark);
             background-color: var(--light);
+            overflow-x: hidden;
         }
 
         .container {
@@ -48,6 +49,7 @@
             text-decoration: none;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(255, 107, 139, 0.3);
+            text-align: center;
         }
 
         .btn:hover {
@@ -96,6 +98,7 @@
             width: 100%;
             top: 0;
             z-index: 1000;
+            transition: all 0.3s ease;
         }
 
         .navbar {
@@ -110,10 +113,17 @@
             font-weight: 700;
             color: var(--primary);
             text-decoration: none;
+            display: flex;
+            align-items: center;
         }
 
         .logo span {
             color: var(--secondary);
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
         }
 
         .nav-links {
@@ -130,16 +140,33 @@
             color: var(--dark);
             font-weight: 500;
             transition: color 0.3s;
+            position: relative;
         }
 
         .nav-links a:hover {
             color: var(--primary);
         }
 
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
         .menu-toggle {
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
+            color: var(--dark);
         }
 
         /* Hero Section */
@@ -147,17 +174,35 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             padding: 150px 0 100px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            transform: rotate(30deg);
+            z-index: 0;
         }
 
         .hero-content {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
             color: var(--dark);
+            line-height: 1.2;
         }
 
         .hero p {
@@ -178,6 +223,8 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-image img {
@@ -203,17 +250,36 @@
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
         .feature-icon {
             font-size: 2.5rem;
             color: var(--primary);
             margin-bottom: 20px;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 107, 139, 0.1);
         }
 
         .feature-card h3 {
@@ -249,12 +315,35 @@
 
         .about-image {
             flex: 1;
+            position: relative;
         }
 
         .about-image img {
             width: 100%;
             border-radius: 10px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-stats {
+            display: flex;
+            margin-top: 30px;
+            gap: 30px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
         }
 
         /* Pricing Section */
@@ -284,6 +373,11 @@
 
         .pricing-card.popular {
             border: 2px solid var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.05) translateY(-10px);
         }
 
         .popular-badge {
@@ -331,10 +425,18 @@
         .pricing-features li {
             padding: 10px 0;
             border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .pricing-features li:last-child {
             border-bottom: none;
+        }
+
+        .pricing-features li i {
+            color: var(--accent);
+            margin-right: 10px;
         }
 
         /* Testimonials Section */
@@ -353,12 +455,26 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 4rem;
+            color: rgba(255, 107, 139, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
         }
 
         .testimonial-text {
             font-style: italic;
             margin-bottom: 20px;
             color: var(--gray);
+            position: relative;
+            z-index: 1;
         }
 
         .testimonial-author {
@@ -403,6 +519,7 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
         }
 
         .faq-question {
@@ -413,6 +530,11 @@
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: #e9ecef;
         }
 
         .faq-answer {
@@ -420,11 +542,20 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease, padding 0.3s ease;
+            background: white;
         }
 
         .faq-answer.active {
             padding: 20px;
             max-height: 500px;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s;
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
         }
 
         /* CTA Section */
@@ -433,6 +564,25 @@
             color: white;
             text-align: center;
             padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
         }
 
         .cta h2 {
@@ -536,7 +686,44 @@
             font-size: 0.9rem;
         }
 
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #ff4d73;
+            transform: translateY(-3px);
+        }
+
         /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+        }
+
         @media (max-width: 992px) {
             .about-content {
                 flex-direction: column;
@@ -544,6 +731,18 @@
             
             .hero h1 {
                 font-size: 2.8rem;
+            }
+            
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+            
+            .pricing-card.popular:hover {
+                transform: translateY(-10px);
+            }
+            
+            .about-stats {
+                justify-content: center;
             }
         }
 
@@ -563,6 +762,7 @@
                 align-items: center;
                 padding-top: 50px;
                 transition: left 0.3s ease;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             }
             
             .nav-links.active {
@@ -580,10 +780,35 @@
             .hero-btns {
                 flex-direction: column;
                 align-items: center;
+                gap: 15px;
             }
             
             .section-title h2 {
                 font-size: 2rem;
+            }
+            
+            .about-stats {
+                flex-wrap: wrap;
+            }
+            
+            .hero {
+                padding: 130px 0 80px;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
             }
         }
 
@@ -598,6 +823,58 @@
             
             .btn {
                 padding: 10px 25px;
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .feature-card, .testimonial-card, .pricing-card {
+                padding: 20px;
+            }
+            
+            .pricing-header, .pricing-features {
+                padding: 20px;
+            }
+            
+            .container {
+                width: 95%;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .hero-btns .btn {
+                width: 100%;
+            }
+            
+            .about-stats {
+                gap: 20px;
+            }
+            
+            .stat-number {
+                font-size: 1.7rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.6rem;
+            }
+            
+            .features-grid, .pricing-grid, .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-image {
+                margin-top: 30px;
             }
         }
     </style>
@@ -607,7 +884,10 @@
     <header>
         <div class="container">
             <nav class="navbar">
-                <a href="#" class="logo">Mochi<span>Bot</span></a>
+                <a href="#" class="logo">
+                    <i class="fas fa-robot logo-icon"></i>
+                    Mochi<span>Bot</span>
+                </a>
                 <ul class="nav-links">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#features">Features</a></li>
@@ -703,8 +983,21 @@
                     <h2>Why Choose Mochi?</h2>
                     <p>Mochi is more than just a robot - it's a companion designed to enhance your daily life. With cutting-edge AI technology, Mochi understands context, learns your preferences, and adapts to become an integral part of your household.</p>
                     <p>Our team of engineers, designers, and AI specialists have spent years developing Mochi to ensure it provides genuine value while maintaining the charm and personality that makes it feel like part of the family.</p>
-                    <p>Whether you need help with daily tasks, want to keep your home secure, or simply desire a friendly presence, Mochi is here for you.</p>
-                    <a href="#pricing" class="btn">Get Your Mochi</a>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">Happy Families</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Satisfaction Rate</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Support</span>
+                        </div>
+                    </div>
+                    <a href="#pricing" class="btn" style="margin-top: 20px;">Get Your Mochi</a>
                 </div>
                 <div class="about-image">
                     <img src="https://images.unsplash.com/photo-1535378620166-273708d44e04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Mochi Robot Features">
@@ -729,11 +1022,11 @@
                     </div>
                     <div class="pricing-features">
                         <ul>
-                            <li>Core AI Assistant</li>
-                            <li>Voice Commands</li>
-                            <li>Basic Home Control</li>
-                            <li>Regular Software Updates</li>
-                            <li>1 Year Warranty</li>
+                            <li><i class="fas fa-check"></i> Core AI Assistant</li>
+                            <li><i class="fas fa-check"></i> Voice Commands</li>
+                            <li><i class="fas fa-check"></i> Basic Home Control</li>
+                            <li><i class="fas fa-check"></i> Regular Software Updates</li>
+                            <li><i class="fas fa-check"></i> 1 Year Warranty</li>
                         </ul>
                         <a href="#" class="btn">Order Now</a>
                     </div>
@@ -747,12 +1040,12 @@
                     </div>
                     <div class="pricing-features">
                         <ul>
-                            <li>Advanced AI Assistant</li>
-                            <li>Emotional Intelligence</li>
-                            <li>Full Home Automation</li>
-                            <li>Security Monitoring</li>
-                            <li>Entertainment Features</li>
-                            <li>2 Year Warranty</li>
+                            <li><i class="fas fa-check"></i> Advanced AI Assistant</li>
+                            <li><i class="fas fa-check"></i> Emotional Intelligence</li>
+                            <li><i class="fas fa-check"></i> Full Home Automation</li>
+                            <li><i class="fas fa-check"></i> Security Monitoring</li>
+                            <li><i class="fas fa-check"></i> Entertainment Features</li>
+                            <li><i class="fas fa-check"></i> 2 Year Warranty</li>
                         </ul>
                         <a href="#" class="btn">Order Now</a>
                     </div>
@@ -765,13 +1058,13 @@
                     </div>
                     <div class="pricing-features">
                         <ul>
-                            <li>Premium AI Assistant</li>
-                            <li>Advanced Emotional AI</li>
-                            <li>Complete Smart Home Integration</li>
-                            <li>Advanced Security Features</li>
-                            <li>Premium Entertainment</li>
-                            <li>Personalized Updates</li>
-                            <li>Lifetime Warranty</li>
+                            <li><i class="fas fa-check"></i> Premium AI Assistant</li>
+                            <li><i class="fas fa-check"></i> Advanced Emotional AI</li>
+                            <li><i class="fas fa-check"></i> Complete Smart Home Integration</li>
+                            <li><i class="fas fa-check"></i> Advanced Security Features</li>
+                            <li><i class="fas fa-check"></i> Premium Entertainment</li>
+                            <li><i class="fas fa-check"></i> Personalized Updates</li>
+                            <li><i class="fas fa-check"></i> Lifetime Warranty</li>
                         </ul>
                         <a href="#" class="btn">Order Now</a>
                     </div>
@@ -888,9 +1181,11 @@
     <!-- CTA Section -->
     <section class="cta" id="contact">
         <div class="container">
-            <h2>Ready to Welcome Mochi Home?</h2>
-            <p>Join thousands of happy families who have already discovered the joy of having Mochi as part of their lives. Order today and transform your home experience.</p>
-            <a href="#pricing" class="btn">Order Your Mochi Now</a>
+            <div class="cta-content">
+                <h2>Ready to Welcome Mochi Home?</h2>
+                <p>Join thousands of happy families who have already discovered the joy of having Mochi as part of their lives. Order today and transform your home experience.</p>
+                <a href="#pricing" class="btn">Order Your Mochi Now</a>
+            </div>
         </div>
     </section>
 
@@ -943,24 +1238,38 @@
         </div>
     </footer>
 
+    <!-- Back to Top Button -->
+    <div class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
     <script>
         // Mobile Menu Toggle
         document.querySelector('.menu-toggle').addEventListener('click', function() {
             document.querySelector('.nav-links').classList.toggle('active');
+            this.querySelector('i').classList.toggle('fa-bars');
+            this.querySelector('i').classList.toggle('fa-times');
         });
 
         // FAQ Accordion
         document.querySelectorAll('.faq-question').forEach(question => {
             question.addEventListener('click', () => {
                 const answer = question.nextElementSibling;
-                answer.classList.toggle('active');
+                const isActive = answer.classList.contains('active');
                 
-                // Close other open FAQs
-                document.querySelectorAll('.faq-answer').forEach(otherAnswer => {
-                    if (otherAnswer !== answer && otherAnswer.classList.contains('active')) {
-                        otherAnswer.classList.remove('active');
-                    }
+                // Close all answers
+                document.querySelectorAll('.faq-answer').forEach(ans => {
+                    ans.classList.remove('active');
                 });
+                document.querySelectorAll('.faq-question').forEach(q => {
+                    q.classList.remove('active');
+                });
+                
+                // If wasn't active, open this one
+                if (!isActive) {
+                    answer.classList.add('active');
+                    question.classList.add('active');
+                }
             });
         });
 
@@ -981,6 +1290,8 @@
                     
                     // Close mobile menu if open
                     document.querySelector('.nav-links').classList.remove('active');
+                    document.querySelector('.menu-toggle i').classList.remove('fa-times');
+                    document.querySelector('.menu-toggle i').classList.add('fa-bars');
                 }
             });
         });
@@ -995,6 +1306,31 @@
                 header.style.background = 'white';
                 header.style.backdropFilter = 'none';
             }
+            
+            // Back to top button
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        // Back to top functionality
+        document.querySelector('.back-to-top').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('active');
+                document.querySelector('.menu-toggle i').classList.remove('fa-times');
+                document.querySelector('.menu-toggle i').classList.add('fa-bars');
+            });
         });
     </script>
 </body>
