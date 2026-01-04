@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mochi Robot Navigation</title>
+    <title>Mochi Car Assistant Robot - LIVE Tracking</title>
     <style>
         * {
             margin: 0;
@@ -13,13 +13,14 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #e6e6e6;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -33,11 +34,15 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
+            background: linear-gradient(45deg, #00b4db, #0083b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .header p {
@@ -54,18 +59,20 @@
         .panel {
             flex: 1;
             min-width: 300px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 15px;
             padding: 25px;
             backdrop-filter: blur(10px);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .panel h2 {
             margin-bottom: 20px;
             font-size: 1.5rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 2px solid rgba(0, 180, 219, 0.5);
             padding-bottom: 10px;
+            color: #00b4db;
         }
         
         .connection-status {
@@ -95,7 +102,7 @@
         }
         
         button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -109,7 +116,7 @@
         
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 180, 219, 0.4);
         }
         
         button:disabled {
@@ -119,18 +126,18 @@
         
         .emotion-buttons {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin-top: 15px;
         }
         
         .emotion-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .emotion-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
         }
         
         .ip-btn {
@@ -151,6 +158,7 @@
             font-family: monospace;
             font-size: 14px;
             margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .log-entry {
@@ -179,6 +187,14 @@
             font-weight: bold;
         }
         
+        .log-entry.car {
+            color: #00b4db;
+        }
+        
+        .log-entry.nav {
+            color: #9b59b6;
+        }
+        
         #map {
             width: 100%;
             height: 400px;
@@ -195,15 +211,16 @@
         
         .nav-btn {
             flex: 1;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
         }
         
         .coordinates-display {
             margin-top: 15px;
             padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
             font-family: monospace;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .robot-status {
@@ -212,17 +229,24 @@
             align-items: center;
             margin-top: 20px;
             padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .status-item {
             text-align: center;
         }
         
+        .status-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
         .status-value {
             font-size: 1.2rem;
             font-weight: bold;
+            color: #00b4db;
         }
         
         .wifi-controls {
@@ -236,7 +260,13 @@
             padding: 12px;
             border-radius: 8px;
             border: none;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
         
         .ip-input {
@@ -256,6 +286,38 @@
         .ip-display h3 {
             margin-bottom: 5px;
             color: #1e90ff;
+        }
+        
+        .car-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .car-data-display {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            border: 1px solid rgba(0, 180, 219, 0.3);
+        }
+        
+        .car-data-display div {
+            margin: 8px 0;
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            border-left: 3px solid #00b4db;
+        }
+        
+        .speed-display {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            color: #00b4db;
+            margin: 10px 0;
         }
         
         @media (max-width: 768px) {
@@ -283,16 +345,80 @@
             .navigation-controls {
                 flex-direction: column;
             }
+            
+            .car-controls {
+                flex-direction: column;
+            }
+        }
+        
+        .car-data-value {
+            color: #00b4db;
+            font-weight: bold;
+            float: right;
+        }
+        
+        .section-title {
+            color: #00b4db;
+            margin: 20px 0 10px 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(0, 180, 219, 0.3);
+            padding-bottom: 5px;
+        }
+        
+        .error-message {
+            color: #ff4757;
+            background: rgba(255, 71, 87, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+        
+        .success-message {
+            color: #2ed573;
+            background: rgba(46, 213, 115, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid rgba(46, 213, 115, 0.3);
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #ff4757;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .live-indicator.active {
+            background-color: #2ed573;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .nav-step-indicator {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: rgba(155, 89, 182, 0.2);
+            border-radius: 5px;
+            font-size: 0.9rem;
         }
     </style>
     <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPON1qEvvwwTvsrmn4VssJhzHEK4YFX18&libraries=places,directions&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPON1qEvvwwTvsrmn4VssJhzHEK4YFX18&libraries=places,directions,geocoding"></script>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 Mochi Robot Controller</h1>
-            <p>Control your robot via Web Bluetooth & WiFi with Google Maps Navigation</p>
+            <h1>🚗 Mochi Car Assistant Robot - LIVE TRACKING</h1>
+            <p>Real-time navigation with live location tracking as you move</p>
         </div>
         
         <div class="main-content">
@@ -301,6 +427,8 @@
                 <div class="connection-status">
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Disconnected</span>
+                    <div class="live-indicator" id="gpsIndicator"></div>
+                    <span id="gpsStatus">GPS: Off</span>
                 </div>
                 
                 <div class="wifi-controls">
@@ -334,44 +462,100 @@
                     <button class="emotion-btn" onclick="sendEmotion('lovely')">😍 Lovely</button>
                     <button class="emotion-btn" onclick="sendEmotion('awake')">👀 Awake</button>
                     <button class="emotion-btn" onclick="sendEmotion('pong')">🎮 Pong Game</button>
-                    <button class="emotion-btn" onclick="startNavigation()">🗺️ Navigation Mode</button>
-                    <button class="ip-btn" onclick="requestIP()" id="ipBtn" style="grid-column: span 2;">📡 Request IP</button>
+                    <button class="emotion-btn" onclick="sendEmotion('navigation')">🗺️ Navigation</button>
+                    <button class="emotion-btn" onclick="startCarAssistant()">🚗 Car Assistant</button>
+                    <button class="ip-btn" onclick="requestIP()" id="ipBtn" style="grid-column: span 3;">📡 Request IP</button>
                 </div>
                 
                 <div class="robot-status" style="margin-top: 20px;">
                     <div class="status-item">
-                        <div class="status-label">Current Emotion</div>
+                        <div class="status-label">Current Mode</div>
                         <div class="status-value" id="currentEmotion">Happy</div>
                     </div>
                     <div class="status-item">
                         <div class="status-label">Connection</div>
                         <div class="status-value" id="connectionStatus">Disconnected</div>
                     </div>
+                    <div class="status-item">
+                        <div class="status-label">Speed</div>
+                        <div class="status-value" id="currentSpeedDisplay">0 km/h</div>
+                    </div>
+                </div>
+                
+                <div class="car-data-display" style="margin-top: 20px;">
+                    <div class="speed-display" id="mainSpeedDisplay">0 km/h</div>
+                    <div>Total Distance: <span class="car-data-value" id="totalDistanceDisplay">0 m</span></div>
+                    <div>Altitude: <span class="car-data-value" id="altitudeDisplay">0 m</span></div>
+                    <div>Current Street: <span class="car-data-value" id="streetDisplay">-</span></div>
+                    <div>GPS Accuracy: <span class="car-data-value" id="accuracyDisplay">- m</span></div>
                 </div>
             </div>
             
             <div class="panel">
-                <h2>🗺️ Google Maps Navigation</h2>
+                <h2>🗺️ LIVE Navigation & Tracking</h2>
                 
                 <div id="map"></div>
                 
-                <div class="navigation-controls">
-                    <input type="text" id="destinationInput" placeholder="Enter destination address">
-                    <button onclick="calculateRoute()" id="routeBtn">🚗 Get Route</button>
+                <div id="mapError" class="error-message" style="display: none;">
+                    Map failed to load. Please check your internet connection.
                 </div>
                 
                 <div class="navigation-controls">
-                    <button class="nav-btn" onclick="sendNavigation('START')" id="startNavBtn" disabled>▶️ Start Navigation</button>
-                    <button class="nav-btn" onclick="sendNavigation('CANCEL')" id="cancelNavBtn" disabled>⏹️ Cancel</button>
+                    <input type="text" id="destinationInput" placeholder="Enter destination address (e.g., Times Square, New York)">
+                    <button onclick="calculateRoute()" id="routeBtn">🚗 Get Route</button>
+                </div>
+                
+                <div class="nav-step-indicator" id="stepIndicator" style="display: none;">
+                    Step: <span id="currentStep">1</span>/<span id="totalSteps">0</span>
+                </div>
+                
+                <div class="navigation-controls">
+                    <button class="nav-btn" onclick="startNavigationWithCarData()" id="startNavBtn" disabled>🚗 Start LIVE Navigation</button>
+                    <button class="nav-btn" onclick="sendNavigation('CANCEL')" id="cancelNavBtn" disabled>⏹️ Cancel Navigation</button>
+                    <button class="nav-btn" onclick="sendNavigation('DESTINATION_REACHED')" id="destBtn" disabled>🏁 Destination Reached</button>
+                </div>
+                
+                <div class="navigation-controls">
+                    <button class="nav-btn" onclick="recalculateRouteFromCurrentPosition()" id="recalcBtn" disabled>🔄 Recalculate Route</button>
+                    <button class="nav-btn" onclick="toggleLiveTracking()" id="trackBtn">📍 Toggle Live Tracking</button>
                 </div>
                 
                 <div class="coordinates-display">
                     <div>Current Location: <span id="currentLocation">Not set</span></div>
                     <div>Destination: <span id="destination">Not set</span></div>
-                    <div>Distance: <span id="distance">-</span></div>
-                    <div>Duration: <span id="duration">-</span></div>
+                    <div>Route Distance: <span id="distance">-</span></div>
+                    <div>Route Duration: <span id="duration">-</span></div>
                     <div>Next Instruction: <span id="nextInstructionDisplay">None</span></div>
                     <div>Navigation Status: <span id="navStatus">Inactive</span></div>
+                </div>
+                
+                <div id="routeError" class="error-message" style="display: none;"></div>
+                <div id="routeSuccess" class="success-message" style="display: none;"></div>
+            </div>
+            
+            <div class="panel">
+                <h2>🚗 Car Assistant Controls</h2>
+                
+                <div class="car-controls">
+                    <button onclick="startCarAssistant()" id="carBtn">🚗 Start Car Mode</button>
+                    <button onclick="stopCarDataMonitoring()" id="stopCarBtn">⏹️ Stop Monitoring</button>
+                </div>
+                
+                <div class="section-title">Live Car Data Monitoring</div>
+                <div class="car-data-display">
+                    <div>Real-time Speed: <span class="car-data-value" id="realtimeSpeed">0.0 km/h</span></div>
+                    <div>Trip Distance: <span class="car-data-value" id="tripDistance">0 m</span></div>
+                    <div>Max Speed: <span class="car-data-value" id="maxSpeed">0.0 km/h</span></div>
+                    <div>Avg Speed: <span class="car-data-value" id="avgSpeed">0.0 km/h</span></div>
+                    <div>Moving Time: <span class="car-data-value" id="movingTime">0s</span></div>
+                    <div>Distance to Next: <span class="car-data-value" id="distanceToNext">-</span></div>
+                </div>
+                
+                <div class="section-title">Car Controls</div>
+                <div class="navigation-controls">
+                    <button onclick="resetTripData()" class="nav-btn">🔄 Reset Trip</button>
+                    <button onclick="simulateCarData()" class="nav-btn">🎮 Simulate Data</button>
+                    <button onclick="toggleSpeedUnit()" class="nav-btn">🔀 Toggle Units</button>
                 </div>
             </div>
         </div>
@@ -388,6 +572,10 @@
                     <div class="status-value" id="bleStatus">Disconnected</div>
                 </div>
                 <div class="status-item">
+                    <div class="status-label">GPS Tracking</div>
+                    <div class="status-value" id="gpsTrackingStatus">Inactive</div>
+                </div>
+                <div class="status-item">
                     <div class="status-label">Last Update</div>
                     <div class="status-value" id="lastUpdate">-</div>
                 </div>
@@ -401,6 +589,7 @@
                 <button onclick="clearLog()" class="nav-btn">🧹 Clear Log</button>
                 <button onclick="testConnection()" class="nav-btn">🔍 Test Connection</button>
                 <button onclick="showHelp()" class="nav-btn">❓ Help</button>
+                <button onclick="exportTripData()" class="nav-btn">💾 Export Data</button>
             </div>
         </div>
     </div>
@@ -430,6 +619,27 @@
         let routeSteps = [];
         let currentStepIndex = 0;
         let isNavigating = false;
+        let isMapLoaded = false;
+        let currentPositionMarker = null;
+        let isLiveTracking = true;
+        
+        // Car data variables
+        let currentSpeed = 0;
+        let totalDistance = 0;
+        let tripDistance = 0;
+        let currentAltitude = 0;
+        let currentStreet = "";
+        let watchPositionId = null;
+        let carDataInterval = null;
+        let lastPosition = null;
+        let lastTime = null;
+        let maxSpeed = 0;
+        let totalMovingTime = 0;
+        let startTime = null;
+        let isMetric = true;
+        let positionHistory = [];
+        let navUpdateInterval = null;
+        let isGPSTracking = false;
         
         // UUIDs (must match Arduino code)
         const SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
@@ -456,6 +666,41 @@
             addLog('Log cleared');
         }
         
+        // Show error message
+        function showError(message, elementId = 'routeError') {
+            const errorDiv = document.getElementById(elementId);
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Hide success message if shown
+            const successDiv = document.getElementById('routeSuccess');
+            if (successDiv) successDiv.style.display = 'none';
+            
+            addLog('Error: ' + message, 'error');
+        }
+        
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('routeSuccess');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            // Hide error message if shown
+            const errorDiv = document.getElementById('routeError');
+            if (errorDiv) errorDiv.style.display = 'none';
+            
+            addLog('Success: ' + message);
+        }
+        
+        // Clear messages
+        function clearMessages() {
+            const errorDiv = document.getElementById('routeError');
+            if (errorDiv) errorDiv.style.display = 'none';
+            
+            const successDiv = document.getElementById('routeSuccess');
+            if (successDiv) successDiv.style.display = 'none';
+        }
+        
         // Update status display
         function updateStatus() {
             const indicator = document.getElementById('statusIndicator');
@@ -465,6 +710,9 @@
             const connectionStatus = document.getElementById('connectionStatus');
             const wifiStatus = document.getElementById('wifiStatus');
             const bleStatus = document.getElementById('bleStatus');
+            const gpsTrackingStatus = document.getElementById('gpsTrackingStatus');
+            const gpsIndicator = document.getElementById('gpsIndicator');
+            const gpsStatusText = document.getElementById('gpsStatus');
             
             // Update connection status text
             if (isConnected && isWifiConnected) {
@@ -493,9 +741,25 @@
                 bleStatus.textContent = 'Disconnected';
             }
             
+            // Update GPS status
+            if (isGPSTracking) {
+                gpsIndicator.className = 'live-indicator active';
+                gpsStatusText.textContent = 'GPS: Live';
+                gpsTrackingStatus.textContent = 'Active';
+                gpsTrackingStatus.style.color = '#2ed573';
+            } else {
+                gpsIndicator.className = 'live-indicator';
+                gpsStatusText.textContent = 'GPS: Off';
+                gpsTrackingStatus.textContent = 'Inactive';
+                gpsTrackingStatus.style.color = '#666';
+            }
+            
             // Update button states
             connectBtn.disabled = isConnected;
             disconnectBtn.disabled = !isConnected && !isWifiConnected;
+            
+            // Enable route button if map is loaded
+            document.getElementById('routeBtn').disabled = !isMapLoaded;
         }
         
         // Connect to WiFi Socket
@@ -525,6 +789,8 @@
                     document.getElementById('wifiBtn').disabled = true;
                     document.getElementById('startNavBtn').disabled = false;
                     document.getElementById('cancelNavBtn').disabled = false;
+                    document.getElementById('destBtn').disabled = false;
+                    document.getElementById('recalcBtn').disabled = false;
                     document.getElementById('activeClients').textContent = activeClients;
                     
                     // Request IP from ESP32
@@ -551,6 +817,8 @@
                     document.getElementById('wifiBtn').disabled = false;
                     document.getElementById('startNavBtn').disabled = true;
                     document.getElementById('cancelNavBtn').disabled = true;
+                    document.getElementById('destBtn').disabled = true;
+                    document.getElementById('recalcBtn').disabled = true;
                     document.getElementById('activeClients').textContent = activeClients;
                     document.getElementById('ipDisplay').style.display = 'none';
                 };
@@ -595,6 +863,8 @@
                 
                 // Auto-fill the IP input for convenience
                 document.getElementById('ipInput').value = ip;
+            } else if (message.includes('CARDATA:')) {
+                addLog('Car data received by ESP32', 'car');
             }
         }
         
@@ -644,6 +914,8 @@
                 // Enable navigation buttons
                 document.getElementById('startNavBtn').disabled = false;
                 document.getElementById('cancelNavBtn').disabled = false;
+                document.getElementById('destBtn').disabled = false;
+                document.getElementById('recalcBtn').disabled = false;
                 
             } catch (error) {
                 addLog('BLE Connection error: ' + error, 'error');
@@ -658,10 +930,24 @@
             updateStatus();
             document.getElementById('startNavBtn').disabled = true;
             document.getElementById('cancelNavBtn').disabled = true;
+            document.getElementById('destBtn').disabled = true;
+            document.getElementById('recalcBtn').disabled = true;
+            
+            // Stop car data monitoring
+            stopCarDataMonitoring();
         }
         
         // Disconnect from all devices
         async function disconnectFromDevice() {
+            // Stop car data monitoring
+            stopCarDataMonitoring();
+            
+            // Clear navigation interval
+            if (navUpdateInterval) {
+                clearInterval(navUpdateInterval);
+                navUpdateInterval = null;
+            }
+            
             // Disconnect BLE
             if (device && device.gatt.connected) {
                 device.gatt.disconnect();
@@ -731,155 +1017,176 @@
         function sendNavigation(command) {
             sendData('NAV:' + command);
             if (command === 'START') {
-                document.getElementById('navStatus').textContent = 'Active';
-                document.getElementById('currentEmotion').textContent = 'Navigation';
+                // For backward compatibility
+                startNavigationWithCarData();
             } else if (command === 'CANCEL') {
                 document.getElementById('navStatus').textContent = 'Inactive';
                 document.getElementById('currentEmotion').textContent = 'Happy';
-            }
-        }
-        
-        // Start navigation
-        function startNavigation() {
-            sendData('NAV:START');
-            document.getElementById('currentEmotion').textContent = 'Navigation';
-            document.getElementById('navStatus').textContent = 'Active';
-        }
-        
-        // Initialize Google Maps
-        function initMap() {
-            // Default to New York if location not available
-            const defaultLocation = { lat: 40.7128, lng: -74.0060 };
-            
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 12,
-                center: defaultLocation,
-                mapTypeControl: true,
-                streetViewControl: true,
-                fullscreenControl: true,
-                styles: [
-                    {
-                        featureType: "all",
-                        elementType: "labels.text.fill",
-                        stylers: [{ color: "#ffffff" }]
-                    },
-                    {
-                        featureType: "all",
-                        elementType: "labels.text.stroke",
-                        stylers: [{ color: "#000000" }, { weight: 2 }]
-                    }
-                ]
-            });
-            
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer({
-                map: map,
-                suppressMarkers: false,
-                polylineOptions: {
-                    strokeColor: '#667eea',
-                    strokeWeight: 4,
-                    strokeOpacity: 0.8
+                isNavigating = false;
+                
+                // Clear navigation interval if exists
+                if (navUpdateInterval) {
+                    clearInterval(navUpdateInterval);
+                    navUpdateInterval = null;
                 }
-            });
-            
-            // Try to get current location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentPosition = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        map.setCenter(currentPosition);
-                        addLog('Location detected: ' + currentPosition.lat.toFixed(4) + ', ' + currentPosition.lng.toFixed(4));
-                        document.getElementById('currentLocation').textContent = 
-                            currentPosition.lat.toFixed(4) + ', ' + currentPosition.lng.toFixed(4);
-                        
-                        // Add marker for current location
-                        new google.maps.Marker({
-                            position: currentPosition,
-                            map: map,
-                            title: 'Current Location',
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                            }
-                        });
-                    },
-                    () => {
-                        addLog('Unable to get location. Using default.', 'error');
-                        document.getElementById('currentLocation').textContent = 'Default location';
-                    }
-                );
+            } else if (command === 'DESTINATION_REACHED') {
+                document.getElementById('navStatus').textContent = 'Destination Reached';
+                document.getElementById('currentEmotion').textContent = 'Happy';
+                isNavigating = false;
+                
+                // Clear navigation interval if exists
+                if (navUpdateInterval) {
+                    clearInterval(navUpdateInterval);
+                    navUpdateInterval = null;
+                }
             }
         }
         
-        // Calculate route
-        function calculateRoute() {
-            const destinationInput = document.getElementById('destinationInput').value;
-            
-            if (!destinationInput) {
-                alert('Please enter a destination');
+        // Start car assistant mode
+        function startCarAssistant() {
+            sendEmotion('car');
+            startCarDataMonitoring();
+            document.getElementById('currentEmotion').textContent = 'Car Assistant';
+            addLog('Car Assistant mode started', 'car');
+        }
+        
+        // Toggle live tracking
+        function toggleLiveTracking() {
+            isLiveTracking = !isLiveTracking;
+            const trackBtn = document.getElementById('trackBtn');
+            if (isLiveTracking) {
+                trackBtn.textContent = '📍 Live Tracking ON';
+                trackBtn.style.background = 'linear-gradient(135deg, #2ed573 0%, #27ae60 100%)';
+                addLog('Live tracking enabled', 'nav');
+            } else {
+                trackBtn.textContent = '📍 Live Tracking OFF';
+                trackBtn.style.background = 'linear-gradient(135deg, #ff4757 0%, #ff3838 100%)';
+                addLog('Live tracking disabled', 'nav');
+            }
+        }
+        
+        // Unified start navigation with LIVE car data tracking
+        function startNavigationWithCarData() {
+            if (!routeSteps.length) {
+                alert('Please calculate a route first by clicking "Get Route"!');
                 return;
             }
             
-            if (!currentPosition) {
-                alert('Unable to get current location. Using default.');
-                currentPosition = { lat: 40.7128, lng: -74.0060 };
+            if (!isWifiConnected) {
+                alert('Please connect to WiFi first!');
+                return;
             }
             
-            const request = {
-                origin: currentPosition,
-                destination: destinationInput,
-                travelMode: 'DRIVING',
-                unitSystem: google.maps.UnitSystem.METRIC,
-                provideRouteAlternatives: false
-            };
+            // Send start command to ESP32
+            sendData('NAV:START');
+            document.getElementById('navStatus').textContent = 'LIVE Navigation';
+            document.getElementById('currentEmotion').textContent = 'Navigation';
+            document.getElementById('stepIndicator').style.display = 'block';
+            document.getElementById('currentStep').textContent = currentStepIndex + 1;
+            document.getElementById('totalSteps').textContent = routeSteps.length;
             
-            addLog('Calculating route to: ' + destinationInput);
+            // Start car data monitoring if not already started
+            if (!watchPositionId) {
+                startCarDataMonitoring();
+                addLog('LIVE Navigation started with automatic tracking', 'nav');
+            } else {
+                addLog('LIVE Navigation started (tracking already active)', 'nav');
+            }
             
-            directionsService.route(request, (result, status) => {
-                if (status === 'OK') {
-                    directionsRenderer.setDirections(result);
-                    
-                    const route = result.routes[0];
-                    const leg = route.legs[0];
-                    
-                    destination = leg.end_address;
-                    routeSteps = leg.steps;
-                    currentStepIndex = 0;
-                    
-                    // Display route info
-                    document.getElementById('destination').textContent = destination;
-                    document.getElementById('distance').textContent = leg.distance.text;
-                    document.getElementById('duration').textContent = leg.duration.text;
-                    
-                    addLog('Route calculated: ' + leg.distance.text + ', ' + leg.duration.text);
-                    addLog('Total steps: ' + routeSteps.length);
-                    
-                    // Enable start navigation button
-                    document.getElementById('startNavBtn').disabled = false;
-                    
-                    // Add destination marker
-                    new google.maps.Marker({
-                        position: leg.end_location,
-                        map: map,
-                        title: 'Destination',
-                        icon: {
-                            url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-                        }
-                    });
-                    
-                } else {
-                    addLog('Route calculation failed: ' + status, 'error');
-                    alert('Could not calculate route. Please check the destination address.');
+            // Start the LIVE navigation with position updates
+            isNavigating = true;
+            currentStepIndex = 0;
+            
+            // Send first navigation instruction based on CURRENT position
+            sendCurrentNavigationStep();
+            
+            // Set up interval to check position and update navigation LIVE
+            if (navUpdateInterval) {
+                clearInterval(navUpdateInterval);
+            }
+            
+            navUpdateInterval = setInterval(() => {
+                if (!isNavigating) {
+                    clearInterval(navUpdateInterval);
+                    navUpdateInterval = null;
+                    return;
                 }
-            });
+                
+                // Update navigation based on CURRENT position
+                updateNavigationFromCurrentPosition();
+                
+            }, 3000); // Check every 3 seconds for LIVE updates
+            
+            addLog('LIVE Navigation tracking started successfully', 'nav');
         }
         
-        // Parse and send navigation steps to robot
-        function sendNavigationStep(step) {
+        // Update navigation based on CURRENT position
+        function updateNavigationFromCurrentPosition() {
+            if (!isNavigating || !lastPosition || routeSteps.length === 0) {
+                return;
+            }
+            
+            // Check if we're close to completing the current step
+            if (currentStepIndex < routeSteps.length) {
+                const currentStep = routeSteps[currentStepIndex];
+                
+                // Calculate distance to end of current step FROM CURRENT POSITION
+                const distanceToStepEnd = calculateDistanceToStep(currentStep);
+                
+                // Update UI with live distance
+                document.getElementById('distanceToNext').textContent = Math.round(distanceToStepEnd) + ' m';
+                
+                // If we're within 30 meters of the step end, move to next step
+                if (distanceToStepEnd < 30 && currentStepIndex < routeSteps.length - 1) {
+                    currentStepIndex++;
+                    document.getElementById('currentStep').textContent = currentStepIndex + 1;
+                    sendCurrentNavigationStep();
+                    addLog(`Moving to step ${currentStepIndex + 1}/${routeSteps.length} (distance: ${Math.round(distanceToStepEnd)}m)`, 'nav');
+                } else if (distanceToStepEnd < 10 && currentStepIndex === routeSteps.length - 1) {
+                    // Destination reached
+                    sendData('NAV:DESTINATION_REACHED');
+                    isNavigating = false;
+                    clearInterval(navUpdateInterval);
+                    navUpdateInterval = null;
+                    document.getElementById('navStatus').textContent = 'Destination Reached';
+                    document.getElementById('nextInstructionDisplay').textContent = 'Arrived at destination';
+                    addLog('Destination reached!', 'sent');
+                }
+                
+                // Send current car data (which includes position) for LIVE updates
+                sendCarDataToESP32();
+                
+                // If live tracking is enabled, update the map
+                if (isLiveTracking && lastPosition) {
+                    updateMapWithCurrentPosition();
+                }
+            }
+        }
+        
+        // Calculate distance to step end FROM CURRENT POSITION
+        function calculateDistanceToStep(step) {
+            if (!lastPosition || !step.end_location) {
+                return 9999;
+            }
+            
+            const stepEndLat = step.end_location.lat();
+            const stepEndLng = step.end_location.lng();
+            
+            return calculateDistance(
+                lastPosition.lat, lastPosition.lng,
+                stepEndLat, stepEndLng
+            );
+        }
+        
+        // Send current navigation step based on CURRENT position
+        function sendCurrentNavigationStep() {
+            if (currentStepIndex >= routeSteps.length) {
+                return;
+            }
+            
+            const step = routeSteps[currentStepIndex];
             const instructions = step.instructions.replace(/<[^>]*>/g, '');
-            const distance = step.distance.text;
+            const originalDistance = step.distance.text;
             
             // Determine command type from instructions
             let command = 'STRAIGHT';
@@ -906,73 +1213,658 @@
             // Clean street name
             streetName = streetName.replace(/<[^>]*>/g, '').trim();
             
-            // Format: COMMAND|DISTANCE|STREET|TIME
-            const navCommand = `NAV:${command}|${distance}|${streetName}|${Math.round(step.duration.value)}`;
-            sendData(navCommand);
+            // Calculate LIVE distance from current position to step end
+            let liveDistance = originalDistance;
+            const calculatedDistance = calculateDistanceToStep(step);
             
-            // Update UI
-            const displayText = `${command.replace('_', ' ')} in ${distance}`;
-            document.getElementById('nextInstructionDisplay').textContent = displayText;
-            
-            addLog('Sending navigation: ' + instructions.substring(0, 50) + '...');
-        }
-        
-        // Start real-time navigation
-        function startRealTimeNavigation() {
-            if (!routeSteps.length) {
-                addLog('No route calculated', 'error');
-                return;
+            // Use calculated LIVE distance
+            if (calculatedDistance > 0) {
+                if (calculatedDistance < 1000) {
+                    liveDistance = Math.round(calculatedDistance) + ' m';
+                } else {
+                    liveDistance = (calculatedDistance / 1000).toFixed(1) + ' km';
+                }
             }
             
-            isNavigating = true;
-            currentStepIndex = 0;
+            // Format: COMMAND|DISTANCE|STREET|TIME
+            const navCommand = `NAV:${command}|${liveDistance}|${streetName}|${Math.round(step.duration.value)}`;
+            sendData(navCommand);
             
-            // Send first step
-            sendNavigationStep(routeSteps[0]);
+            // Update UI with LIVE instruction
+            const displayText = `${command.replace('_', ' ')} in ${liveDistance}`;
+            document.getElementById('nextInstructionDisplay').textContent = displayText;
             
-            // Set up interval for next steps
-            const navInterval = setInterval(() => {
-                if (!isNavigating) {
-                    clearInterval(navInterval);
+            addLog(`LIVE Navigation: ${command} in ${liveDistance}`, 'nav');
+        }
+        
+        // Recalculate route from CURRENT position
+        function recalculateRouteFromCurrentPosition() {
+            if (!isNavigating || !lastPosition || !destination) {
+                if (!lastPosition) {
+                    alert('No GPS position available. Please enable location services.');
                     return;
                 }
-                
-                currentStepIndex++;
-                if (currentStepIndex < routeSteps.length) {
-                    sendNavigationStep(routeSteps[currentStepIndex]);
-                } else {
-                    // Destination reached
-                    sendData('NAV:DESTINATION_REACHED');
-                    isNavigating = false;
-                    clearInterval(navInterval);
-                    document.getElementById('navStatus').textContent = 'Destination Reached';
-                    document.getElementById('nextInstructionDisplay').textContent = 'Arrived at destination';
-                    addLog('Destination reached!', 'sent');
-                    alert('Destination reached! Navigation complete.');
+                if (!destination) {
+                    alert('No destination set. Please calculate a route first.');
+                    return;
                 }
-            }, 15000); // Send new instruction every 15 seconds
+            }
+            
+            addLog('Recalculating route from CURRENT position...', 'nav');
+            
+            const request = {
+                origin: { lat: lastPosition.lat, lng: lastPosition.lng },
+                destination: destination,
+                travelMode: 'DRIVING',
+                unitSystem: google.maps.UnitSystem.METRIC,
+                provideRouteAlternatives: false
+            };
+            
+            // Show loading state
+            document.getElementById('recalcBtn').disabled = true;
+            document.getElementById('recalcBtn').textContent = 'Recalculating...';
+            
+            directionsService.route(request, (result, status) => {
+                // Reset button state
+                document.getElementById('recalcBtn').disabled = false;
+                document.getElementById('recalcBtn').textContent = '🔄 Recalculate Route';
+                
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(result);
+                    
+                    const route = result.routes[0];
+                    const leg = route.legs[0];
+                    
+                    routeSteps = leg.steps;
+                    currentStepIndex = 0; // Reset to first step from NEW position
+                    
+                    // Update route info
+                    document.getElementById('distance').textContent = leg.distance.text;
+                    document.getElementById('duration').textContent = leg.duration.text;
+                    document.getElementById('currentStep').textContent = currentStepIndex + 1;
+                    document.getElementById('totalSteps').textContent = routeSteps.length;
+                    
+                    addLog('Route recalculated from current position: ' + leg.distance.text + ', ' + leg.duration.text, 'nav');
+                    
+                    // Send new first instruction based on CURRENT position
+                    sendCurrentNavigationStep();
+                    
+                    showSuccess('Route recalculated from your current position');
+                    
+                } else {
+                    addLog('Route recalculation failed: ' + status, 'error');
+                    showError('Could not recalculate route. Please try again.');
+                }
+            });
         }
         
         // Update navigation status from robot messages
         function updateNavigationStatus(message) {
             if (message.includes('NAV:READY')) {
                 document.getElementById('navStatus').textContent = 'Ready';
-                startRealTimeNavigation();
+                addLog('ESP32 ready for navigation', 'nav');
             } else if (message.includes('NAV:CANCELLED')) {
                 document.getElementById('navStatus').textContent = 'Cancelled';
                 isNavigating = false;
                 document.getElementById('nextInstructionDisplay').textContent = 'Navigation cancelled';
+                document.getElementById('stepIndicator').style.display = 'none';
+                
+                // Clear navigation interval if exists
+                if (navUpdateInterval) {
+                    clearInterval(navUpdateInterval);
+                    navUpdateInterval = null;
+                }
             } else if (message.includes('NAV:DESTINATION_REACHED')) {
                 document.getElementById('navStatus').textContent = 'Destination Reached';
                 document.getElementById('nextInstructionDisplay').textContent = 'Arrived at destination';
+                document.getElementById('stepIndicator').style.display = 'none';
                 isNavigating = false;
+                
+                // Clear navigation interval if exists
+                if (navUpdateInterval) {
+                    clearInterval(navUpdateInterval);
+                    navUpdateInterval = null;
+                }
             } else if (message.includes('NAV:INSTRUCTION:')) {
                 const parts = message.split(':')[1].split('|');
                 if (parts.length >= 2) {
                     const displayText = `${parts[0].replace('_', ' ')} in ${parts[1]}`;
                     document.getElementById('nextInstructionDisplay').textContent = displayText;
+                    addLog(`ESP32 received: ${displayText}`, 'nav');
                 }
             }
+        }
+        
+        // Initialize Google Maps
+        function initMap() {
+            try {
+                // Default location
+                const defaultLocation = { lat: 40.7128, lng: -74.0060 };
+                
+                // Check if Google Maps API is available
+                if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                    showError('Google Maps API failed to load. Please check your internet connection.', 'mapError');
+                    addLog('Google Maps API not available', 'error');
+                    return;
+                }
+                
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 14,
+                    center: defaultLocation,
+                    mapTypeControl: true,
+                    streetViewControl: true,
+                    fullscreenControl: true,
+                    styles: [
+                        {
+                            elementType: "geometry",
+                            stylers: [{ color: "#242f3e" }]
+                        },
+                        {
+                            elementType: "labels.text.stroke",
+                            stylers: [{ color: "#242f3e" }]
+                        },
+                        {
+                            elementType: "labels.text.fill",
+                            stylers: [{ color: "#746855" }]
+                        }
+                    ]
+                });
+                
+                // Initialize directions service and renderer
+                directionsService = new google.maps.DirectionsService();
+                directionsRenderer = new google.maps.DirectionsRenderer({
+                    map: map,
+                    suppressMarkers: false,
+                    polylineOptions: {
+                        strokeColor: '#00b4db',
+                        strokeWeight: 4,
+                        strokeOpacity: 0.8
+                    }
+                });
+                
+                isMapLoaded = true;
+                updateStatus();
+                addLog('Google Maps loaded successfully');
+                
+                // Hide map error if shown
+                document.getElementById('mapError').style.display = 'none';
+                
+                // Try to get current location
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            currentPosition = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                                accuracy: position.coords.accuracy
+                            };
+                            map.setCenter(currentPosition);
+                            map.setZoom(14);
+                            addLog('Location detected: ' + currentPosition.lat.toFixed(4) + ', ' + currentPosition.lng.toFixed(4));
+                            document.getElementById('currentLocation').textContent = 
+                                currentPosition.lat.toFixed(4) + ', ' + currentPosition.lng.toFixed(4);
+                            document.getElementById('accuracyDisplay').textContent = 
+                                Math.round(currentPosition.accuracy) + ' m';
+                            
+                            // Add marker for current location
+                            currentPositionMarker = new google.maps.Marker({
+                                position: currentPosition,
+                                map: map,
+                                title: 'Current Location',
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                                }
+                            });
+                        },
+                        (error) => {
+                            addLog('Geolocation error: ' + error.message, 'error');
+                            document.getElementById('currentLocation').textContent = 'Default location (New York)';
+                            showSuccess('Using default location. You can still calculate routes.');
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
+                        }
+                    );
+                }
+                
+            } catch (error) {
+                showError('Failed to initialize Google Maps: ' + error.message, 'mapError');
+                addLog('Map initialization error: ' + error, 'error');
+            }
+        }
+        
+        // Calculate route
+        function calculateRoute() {
+            clearMessages();
+            
+            const destinationInput = document.getElementById('destinationInput').value.trim();
+            
+            if (!destinationInput) {
+                showError('Please enter a destination address');
+                return;
+            }
+            
+            if (!isMapLoaded) {
+                showError('Google Maps is still loading. Please wait...');
+                return;
+            }
+            
+            // Use current position or default
+            let origin = currentPosition;
+            if (!origin) {
+                origin = { lat: 40.7128, lng: -74.0060 };
+                showSuccess('Using default starting location (New York)');
+            }
+            
+            addLog('Calculating route to: ' + destinationInput);
+            
+            const request = {
+                origin: origin,
+                destination: destinationInput,
+                travelMode: 'DRIVING',
+                unitSystem: google.maps.UnitSystem.METRIC,
+                provideRouteAlternatives: false,
+                optimizeWaypoints: false
+            };
+            
+            // Show loading state
+            document.getElementById('routeBtn').disabled = true;
+            document.getElementById('routeBtn').textContent = 'Calculating...';
+            
+            directionsService.route(request, (result, status) => {
+                // Reset button state
+                document.getElementById('routeBtn').disabled = false;
+                document.getElementById('routeBtn').textContent = '🚗 Get Route';
+                
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(result);
+                    
+                    const route = result.routes[0];
+                    const leg = route.legs[0];
+                    
+                    destination = leg.end_address;
+                    routeSteps = leg.steps;
+                    currentStepIndex = 0;
+                    
+                    // Display route info
+                    document.getElementById('destination').textContent = destination;
+                    document.getElementById('distance').textContent = leg.distance.text;
+                    document.getElementById('duration').textContent = leg.duration.text;
+                    document.getElementById('nextInstructionDisplay').textContent = 'Ready for LIVE navigation';
+                    document.getElementById('currentStep').textContent = '1';
+                    document.getElementById('totalSteps').textContent = routeSteps.length;
+                    
+                    addLog('Route calculated: ' + leg.distance.text + ', ' + leg.duration.text);
+                    addLog('Total steps: ' + routeSteps.length);
+                    
+                    // Enable start navigation button
+                    document.getElementById('startNavBtn').disabled = false;
+                    
+                    // Add destination marker
+                    new google.maps.Marker({
+                        position: leg.end_location,
+                        map: map,
+                        title: 'Destination: ' + destination,
+                        icon: {
+                            url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                        }
+                    });
+                    
+                    // Show success message
+                    showSuccess(`Route found! Distance: ${leg.distance.text}, Duration: ${leg.duration.text}`);
+                    
+                } else {
+                    let errorMessage = 'Could not calculate route. ';
+                    
+                    switch(status) {
+                        case 'ZERO_RESULTS':
+                            errorMessage += 'No route found between the origin and destination.';
+                            break;
+                        case 'NOT_FOUND':
+                            errorMessage += 'The origin, destination, or waypoint could not be found.';
+                            break;
+                        case 'REQUEST_DENIED':
+                            errorMessage += 'Google Maps API request was denied. Check your API key.';
+                            break;
+                        case 'OVER_QUERY_LIMIT':
+                            errorMessage += 'Google Maps API quota exceeded.';
+                            break;
+                        case 'INVALID_REQUEST':
+                            errorMessage += 'Invalid request. Please check the destination address.';
+                            break;
+                        case 'UNKNOWN_ERROR':
+                            errorMessage += 'Unknown error occurred. Please try again.';
+                            break;
+                        default:
+                            errorMessage += 'Status: ' + status;
+                    }
+                    
+                    showError(errorMessage);
+                    addLog('Route calculation failed: ' + status + ' - ' + errorMessage, 'error');
+                }
+            });
+        }
+        
+        // Get real-time position and calculate speed
+        function startCarDataMonitoring() {
+            if (navigator.geolocation) {
+                startTime = Date.now();
+                positionHistory = [];
+                
+                watchPositionId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        const newPosition = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            time: Date.now(),
+                            altitude: position.coords.altitude || 0,
+                            accuracy: position.coords.accuracy
+                        };
+                        
+                        // Update GPS tracking status
+                        isGPSTracking = true;
+                        updateStatus();
+                        
+                        // Store position in history
+                        positionHistory.push({
+                            ...newPosition,
+                            speed: currentSpeed
+                        });
+                        
+                        // Limit history size
+                        if (positionHistory.length > 1000) {
+                            positionHistory.shift();
+                        }
+                        
+                        // Calculate speed if we have previous position
+                        if (lastPosition && lastTime) {
+                            const timeDiff = (newPosition.time - lastTime) / 1000;
+                            if (timeDiff > 0 && timeDiff < 10) {
+                                const distance = calculateDistance(
+                                    lastPosition.lat, lastPosition.lng,
+                                    newPosition.lat, newPosition.lng
+                                );
+                                
+                                const speedMps = distance / timeDiff;
+                                currentSpeed = speedMps * 3.6;
+                                
+                                totalDistance += distance;
+                                
+                                if (currentSpeed > 1) {
+                                    tripDistance += distance;
+                                    totalMovingTime += timeDiff;
+                                }
+                                
+                                if (currentSpeed > maxSpeed) {
+                                    maxSpeed = currentSpeed;
+                                }
+                                
+                                if (currentSpeed > 5) {
+                                    getStreetName(newPosition.lat, newPosition.lng);
+                                }
+                                
+                                currentAltitude = newPosition.altitude;
+                                updateCarDataDisplay();
+                                sendCarDataToESP32();
+                            }
+                        }
+                        
+                        lastPosition = newPosition;
+                        lastTime = newPosition.time;
+                        
+                        document.getElementById('currentLocation').textContent = 
+                            newPosition.lat.toFixed(6) + ', ' + newPosition.lng.toFixed(6);
+                        
+                        document.getElementById('accuracyDisplay').textContent = 
+                            Math.round(newPosition.accuracy) + ' m';
+                        
+                    },
+                    (error) => {
+                        isGPSTracking = false;
+                        updateStatus();
+                        
+                        let errorMsg = 'Geolocation error: ';
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMsg += 'Permission denied. Please allow location access.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMsg += 'Location information unavailable.';
+                                break;
+                            case error.TIMEOUT:
+                                errorMsg += 'Location request timed out.';
+                                break;
+                            default:
+                                errorMsg += error.message;
+                        }
+                        addLog(errorMsg, 'error');
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 5000
+                    }
+                );
+                
+                addLog('Car data monitoring started', 'car');
+                document.getElementById('carBtn').disabled = true;
+                document.getElementById('stopCarBtn').disabled = false;
+            } else {
+                addLog('Geolocation not supported', 'error');
+            }
+        }
+        
+        // Update map with current position
+        function updateMapWithCurrentPosition() {
+            if (!map || !lastPosition) {
+                return;
+            }
+            
+            // Update map center to current position
+            map.setCenter(lastPosition);
+            
+            // Update or create current position marker
+            if (currentPositionMarker) {
+                currentPositionMarker.setPosition(lastPosition);
+            } else {
+                currentPositionMarker = new google.maps.Marker({
+                    position: lastPosition,
+                    map: map,
+                    title: 'Current Position',
+                    icon: {
+                        url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    },
+                    zIndex: 1000
+                });
+            }
+        }
+        
+        // Calculate distance between two coordinates using Haversine formula
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371000;
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+        
+        function toRad(degrees) {
+            return degrees * Math.PI / 180;
+        }
+        
+        // Get street name using reverse geocoding
+        function getStreetName(lat, lng) {
+            if (!window.google || !google.maps || !google.maps.Geocoder) return;
+            
+            const geocoder = new google.maps.Geocoder();
+            const latlng = { lat: lat, lng: lng };
+            
+            geocoder.geocode({ location: latlng }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    const address = results[0].address_components;
+                    for (let component of address) {
+                        if (component.types.includes('route')) {
+                            currentStreet = component.long_name;
+                            break;
+                        }
+                    }
+                    if (!currentStreet && results[0].formatted_address) {
+                        currentStreet = results[0].formatted_address.split(',')[0];
+                    }
+                    updateCarDataDisplay();
+                } else {
+                    currentStreet = "Unknown Street";
+                }
+            });
+        }
+        
+        // Update car data display in UI
+        function updateCarDataDisplay() {
+            let speedDisplay = isMetric ? 
+                currentSpeed.toFixed(1) + ' km/h' : 
+                (currentSpeed * 0.621371).toFixed(1) + ' mph';
+            
+            let distanceDisplay = '';
+            if (isMetric) {
+                distanceDisplay = totalDistance > 1000 ? 
+                    (totalDistance / 1000).toFixed(2) + ' km' : 
+                    Math.round(totalDistance) + ' m';
+            } else {
+                const distanceMiles = totalDistance * 0.000621371;
+                distanceDisplay = distanceMiles > 1 ? 
+                    distanceMiles.toFixed(2) + ' mi' : 
+                    Math.round(totalDistance * 3.28084) + ' ft';
+            }
+            
+            let tripDistanceDisplay = '';
+            if (isMetric) {
+                tripDistanceDisplay = tripDistance > 1000 ? 
+                    (tripDistance / 1000).toFixed(2) + ' km' : 
+                    Math.round(tripDistance) + ' m';
+            } else {
+                const tripMiles = tripDistance * 0.000621371;
+                tripDistanceDisplay = tripMiles > 1 ? 
+                    tripMiles.toFixed(2) + ' mi' : 
+                    Math.round(tripDistance * 3.28084) + ' ft';
+            }
+            
+            document.getElementById('currentSpeedDisplay').textContent = speedDisplay;
+            document.getElementById('mainSpeedDisplay').textContent = speedDisplay;
+            document.getElementById('realtimeSpeed').textContent = speedDisplay;
+            document.getElementById('totalDistanceDisplay').textContent = distanceDisplay;
+            document.getElementById('tripDistance').textContent = tripDistanceDisplay;
+            document.getElementById('altitudeDisplay').textContent = Math.round(currentAltitude) + ' m';
+            document.getElementById('streetDisplay').textContent = currentStreet;
+            
+            const avgSpeed = totalMovingTime > 0 ? 
+                (tripDistance / totalMovingTime) * 3.6 : 0;
+            document.getElementById('avgSpeed').textContent = 
+                isMetric ? avgSpeed.toFixed(1) + ' km/h' : 
+                (avgSpeed * 0.621371).toFixed(1) + ' mph';
+            
+            document.getElementById('maxSpeed').textContent = 
+                isMetric ? maxSpeed.toFixed(1) + ' km/h' : 
+                (maxSpeed * 0.621371).toFixed(1) + ' mph';
+            
+            const hours = Math.floor(totalMovingTime / 3600);
+            const minutes = Math.floor((totalMovingTime % 3600) / 60);
+            const seconds = Math.floor(totalMovingTime % 60);
+            document.getElementById('movingTime').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Send car data to ESP32
+        function sendCarDataToESP32() {
+            if (isWifiConnected) {
+                const carData = `CARDATA:${currentSpeed.toFixed(1)}|${tripDistance.toFixed(0)}|${currentAltitude.toFixed(0)}|${currentStreet}`;
+                sendWifiData(carData);
+            }
+        }
+        
+        // Stop car data monitoring
+        function stopCarDataMonitoring() {
+            if (watchPositionId !== null) {
+                navigator.geolocation.clearWatch(watchPositionId);
+                watchPositionId = null;
+            }
+            if (carDataInterval) {
+                clearInterval(carDataInterval);
+                carDataInterval = null;
+            }
+            
+            isGPSTracking = false;
+            updateStatus();
+            
+            addLog('Car data monitoring stopped', 'car');
+            document.getElementById('carBtn').disabled = false;
+            document.getElementById('stopCarBtn').disabled = true;
+        }
+        
+        // Reset trip data
+        function resetTripData() {
+            tripDistance = 0;
+            maxSpeed = 0;
+            totalMovingTime = 0;
+            positionHistory = [];
+            startTime = Date.now();
+            updateCarDataDisplay();
+            addLog('Trip data reset', 'car');
+        }
+        
+        // Simulate car data for testing
+        function simulateCarData() {
+            currentSpeed = 40 + Math.random() * 40;
+            tripDistance += Math.random() * 100;
+            totalDistance += Math.random() * 100;
+            currentAltitude = 100 + Math.random() * 500;
+            currentStreet = "Simulated Street " + Math.floor(Math.random() * 1000);
+            
+            if (currentSpeed > maxSpeed) {
+                maxSpeed = currentSpeed;
+            }
+            
+            updateCarDataDisplay();
+            sendCarDataToESP32();
+            addLog('Simulated car data sent', 'car');
+        }
+        
+        // Toggle between metric and imperial units
+        function toggleSpeedUnit() {
+            isMetric = !isMetric;
+            updateCarDataDisplay();
+            addLog(`Switched to ${isMetric ? 'metric' : 'imperial'} units`, 'car');
+        }
+        
+        // Export trip data
+        function exportTripData() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                totalDistance: totalDistance,
+                tripDistance: tripDistance,
+                maxSpeed: maxSpeed,
+                totalMovingTime: totalMovingTime,
+                positionHistory: positionHistory
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `trip-data-${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addLog('Trip data exported', 'car');
         }
         
         // Test connection
@@ -990,37 +1882,48 @@
         // Show help
         function showHelp() {
             const helpText = `
-Mochi Robot Controller Help:
+Mochi Car Assistant Robot - LIVE Navigation:
 
-1. WiFi Connection:
-   - Enter ESP32 IP address (shown on OLED screen)
-   - Click "Connect WiFi"
-   - Use "Request IP" to get the IP if needed
+HOW LIVE NAVIGATION WORKS:
 
-2. BLE Connection:
-   - Click "Connect BLE" for Bluetooth connection
-   - Works with Mochi-Robot-BLE device
-
-3. Navigation:
+1. Calculate Route:
    - Enter destination address
-   - Click "Get Route" to calculate
-   - Click "Start Navigation" to begin
-   - Instructions will be sent to ESP32 OLED
+   - Click "Get Route"
+   - System calculates the route
 
-4. Emotions:
-   - Click any emotion button to send to robot
-   - ESP32 will display corresponding emotion
+2. Start LIVE Navigation:
+   - Click "Start LIVE Navigation"
+   - GPS tracking automatically starts
+   - Navigation updates EVERY 3 SECONDS
+   - Uses YOUR CURRENT POSITION for updates
 
-5. IP Display:
-   - ESP32 shows IP on startup for 5 seconds
-   - Use "Request IP" to show it again
-   - IP is also displayed in connection panel
+3. LIVE Updates:
+   - Distance to next turn updates in real-time
+   - Instructions change based on your position
+   - Map follows your movement (if enabled)
+   - Speed and distance show real values
 
-Troubleshooting:
-- Check ESP32 Serial Monitor for errors
-- Ensure WiFi credentials are correct
-- Make sure WebSocket server is running on port 8080
-- Check OLED connections if display isn't working
+4. Recalculate Route:
+   - Click "Recalculate Route" if you go off course
+   - New route from CURRENT position to destination
+
+5. Toggle Live Tracking:
+   - Green dot on map shows your position
+   - Map automatically follows you when enabled
+
+KEY FEATURES:
+- Real-time GPS position tracking
+- Navigation updates every 3 seconds
+- Automatic step progression
+- Live distance calculations
+- Map follows your movement
+- Speed and distance monitoring
+
+TROUBLESHOOTING:
+- Allow location access in browser
+- Ensure GPS is enabled on device
+- Move around to trigger position updates
+- Click "Recalculate" if navigation seems stuck
             `;
             
             alert(helpText);
@@ -1042,6 +1945,13 @@ Troubleshooting:
                 addLog('WebSocket is not supported in this browser.', 'error');
                 document.getElementById('wifiBtn').disabled = true;
                 document.getElementById('wifiBtn').innerHTML = '📶 WS Not Supported';
+            }
+            
+            // Check if geolocation is supported
+            if (!navigator.geolocation) {
+                addLog('Geolocation is not supported in this browser.', 'error');
+                document.getElementById('carBtn').disabled = true;
+                document.getElementById('carBtn').innerHTML = '🚗 Geo Not Supported';
             }
             
             // Auto-focus destination input
@@ -1072,11 +1982,17 @@ Troubleshooting:
                 localStorage.setItem('esp32_ip', e.target.value);
             });
             
-            // Update last update time on page load
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            // Initialize Google Maps after page load
+            setTimeout(() => {
+                initMap();
+            }, 1000);
             
-            addLog('Mochi Robot Controller initialized');
+            // Pre-fill with a test destination
+            document.getElementById('destinationInput').value = "Times Square, New York";
+            
+            addLog('Mochi Car Assistant Robot initialized', 'car');
             addLog('Ready to connect...');
+            addLog('Try destination: "Times Square, New York" for testing', 'info');
         });
     </script>
 </body>
